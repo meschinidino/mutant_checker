@@ -1,27 +1,31 @@
-import sqlite3
-
 class DNARepository:
-    def __init__(self, db_path='dna_results.db'):
-        self.db_path = db_path
-        self._create_table()
+    def __init__(self):
+        self.conn = sqlite3.connect('dna_results.db')
+        self.create_table()
 
-    def _create_table(self):
-        with sqlite3.connect(self.db_path) as conn:
-            cursor = conn.cursor()
-            cursor.execute('''
+    def create_table(self):
+        with self.conn:
+            self.conn.execute('''
                 CREATE TABLE IF NOT EXISTS dna_results (
-                    id INTEGER PRIMARY KEY,
-                    matrix TEXT,
+                    dna TEXT PRIMARY KEY,
                     is_mutant BOOLEAN
                 )
             ''')
-            conn.commit()
 
-    def save_result(self, matrix, is_mutant):
-        with sqlite3.connect(self.db_path) as conn:
-            cursor = conn.cursor()
-            cursor.execute('''
-                INSERT INTO dna_results (matrix, is_mutant)
+    def save_result(self, dna: list[str], is_mutant: bool):
+        dna_str = ''.join(dna)
+        with self.conn:
+            self.conn.execute('''
+                INSERT OR REPLACE INTO dna_results (dna, is_mutant)
                 VALUES (?, ?)
-            ''', (str(matrix), is_mutant))
-            conn.commit()
+            ''', (dna_str, is_mutant))
+
+    def count_mutant_dna(self):
+        cursor = self.conn.cursor()
+        cursor.execute('SELECT COUNT(*) FROM dna_results WHERE is_mutant = 1')
+        return cursor.fetchone()[0]
+
+    def count_human_dna(self):
+        cursor = self.conn.cursor()
+        cursor.execute('SELECT COUNT(*) FROM dna_results WHERE is_mutant = 0')
+        return cursor.fetchone()[0]

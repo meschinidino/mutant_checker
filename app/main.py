@@ -20,6 +20,17 @@ async def mutant(dna_request: DNARequest):
         repo.save_result(dna, False)
         raise HTTPException(status_code=403, detail="Not a mutant")
 
+@app.get("/stats/")
+async def stats():
+    count_mutant_dna = repo.count_mutant_dna()
+    count_human_dna = repo.count_human_dna()
+    ratio = count_mutant_dna / (count_human_dna + count_mutant_dna) if (count_human_dna + count_mutant_dna) > 0 else 0
+    return {
+        "count_mutant_dna": count_mutant_dna,
+        "count_human_dna": count_human_dna,
+        "ratio": ratio
+    }
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
