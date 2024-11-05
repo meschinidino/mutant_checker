@@ -29,7 +29,12 @@ def test_check_matrix_human():
 def test_check_matrix_human_no_mutant_sequences():
     response = client.post(
         "/check_matrix",
-        json={"matrix": ["ATGCGA", "CAGTGC", "TTATGT", "AGACGG", "GCGTCA", "TCACTG"]}
+        json={"matrix": ["ATGCGA",
+                         "CAGTGC",
+                         "TTATGT",
+                         "AGACGG",
+                         "GCGTCA",
+                         "TCACTG"]}
     )
     assert response.status_code == 200
     assert response.json() == {"is_mutant": False}
@@ -37,7 +42,12 @@ def test_check_matrix_human_no_mutant_sequences():
 def test_check_matrix_mixed_sequences():
     response = client.post(
         "/check_matrix",
-        json={"matrix": ["ATGCGA", "CAGTGC", "TTATGT", "AGAAGG", "CCCCTA", "TCACTG"]}
+        json={"matrix": ["ATGCGA",
+                         "CAGTGC",
+                         "TTATGT",
+                         "AGAAGG",
+                         "CCCCTA",
+                         "TCACTG"]}
     )
     assert response.status_code == 200
     assert response.json() == {"is_mutant": True}

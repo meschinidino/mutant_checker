@@ -35,5 +35,7 @@ async def stats():
 app.include_router(dna_controller.router)
 
 if __name__ == "__main__":
+    repo.conn.execute('DROP TABLE IF EXISTS dna_results')
+    repo.create_table()
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
