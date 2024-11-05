@@ -1,6 +1,8 @@
+import sqlite3
+
 class DNARepository:
     def __init__(self):
-        self.conn = sqlite3.connect('dna_results.db')
+        self.conn = sqlite3.connect('dna_results.db', check_same_thread=False)
         self.create_table()
 
     def create_table(self):

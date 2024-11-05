@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from app.repositories.dna_repository import DNARepository
 from app.services.mutant_service import is_mutant
+from app.controllers import dna_controller
 
 app = FastAPI()
 repo = DNARepository()
@@ -30,6 +31,8 @@ async def stats():
         "count_human_dna": count_human_dna,
         "ratio": ratio
     }
+
+app.include_router(dna_controller.router)
 
 if __name__ == "__main__":
     import uvicorn

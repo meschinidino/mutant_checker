@@ -70,3 +70,11 @@ def test_check_matrix_diagonal_left():
     assert response.json() == {"message": "Mutant detected"}
     results = get_persisted_results('dna_results.db')
     assert results[-1] == (True,)
+
+def test_stats():
+    response = client.get("/stats/")
+    assert response.status_code == 200
+    stats = response.json()
+    assert "count_mutant_dna" in stats
+    assert "count_human_dna" in stats
+    assert "ratio" in stats
