@@ -6,4 +6,4 @@ services:
     dockerfilePath: Dockerfile
     envVars:
       - key: PORT
-        value: 8000
+        value: 8000  # This could be removed if Render dynamically sets the PORT
